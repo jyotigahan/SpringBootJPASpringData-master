@@ -8,6 +8,10 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.jyotionjava.sdjpa.exception.ResourceNotFoundException;
@@ -33,7 +37,7 @@ public class BookingServiceImpl implements BookingService{
         this.bookingRepository = bookingRepository;
     }
 
-    @Cacheable("bookingList")
+   // @Cacheable("bookingList")
     @Override
     public List<Booking> listAll() {
     	
@@ -47,7 +51,7 @@ public class BookingServiceImpl implements BookingService{
 }
     
 	@Override
-	//@Cacheable(value="bookings", key="#id")
+	@Cacheable(value="bookings", key="#id")
 	public Booking getById(Long id) {	
 		
 		 logger.info(System.currentTimeMillis() +"    getById --> Start");
@@ -65,7 +69,7 @@ public class BookingServiceImpl implements BookingService{
 	}
 
 	@Override
-	//@CachePut(value="bookings", key="#booking.bookingId")
+	@CachePut(value="bookings", key="#booking.bookingId")
 	public Booking saveOrUpdate(Booking booking) {
 		
 		bookingRepository.save(booking);
@@ -73,7 +77,7 @@ public class BookingServiceImpl implements BookingService{
 	}
 
 	@Override
-	//@CacheEvict(value = "bookings", key = "#id")
+	@CacheEvict(value = "bookings", key = "#id")
 	public void delete(Long id) {
 		
 		
@@ -83,5 +87,23 @@ public class BookingServiceImpl implements BookingService{
 			throw new EmptyResultDataAccessException("Entity with id :"+id+ " is not exist",1);
 		}
 	}
+		
+	@Override
+	public Page<Booking> listAllByPage(Pageable pageable) {
+		return bookingRepository.findAll(pageable);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Page<Booking>  sortByPage(int pageNumber) {
+		return  bookingRepository.findAll(gotoPage(0));
+	}
+	
+	private PageRequest gotoPage(int page){
+    PageRequest request = new PageRequest(page,4,Sort.Direction.ASC,"bookingId");
+	return request;
+	}
+
+
 	
 }

@@ -12,6 +12,8 @@ import javax.ws.rs.Produces;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -142,5 +144,25 @@ public class BookingController {
 		}
 		bookingService.delete(bookingId);
 		return new ResponseEntity<UserResponse>(new UserResponse(HttpStatus.OK.value(), "Booking Has Been Deleted"), HttpStatus.OK);		
+	}
+    
+    //  GET --> http://localhost:8080/booking/bookings?page=0&size=3   
+	@ApiOperation(value = "View Bookings Page Wise", response = Page.class)
+    @Produces("application/json")
+	@GetMapping("/bookings")
+    public  ResponseEntity<Page<Booking>>  getBookingsPageWise( Pageable pageable){
+		logger.info("Display Booking Page Wise" + pageable);
+		Page<Booking> bookings = bookingService.listAllByPage(pageable);		
+		return new ResponseEntity< Page<Booking> >(bookings, HttpStatus.OK);
+	} 
+	
+	// GET --> http://localhost:8080/booking/sortedbookings/2
+	@ApiOperation(value = "View Sorted Booking PageWise")
+	@GetMapping("/sortedbookings/{pageNumber}")
+	@Produces("application/json")
+ 	public ResponseEntity<Page<Booking>>  getSortedBookingPageWise(@PathVariable int pageNumber) {		
+		logger.info("Returning Sorted Bookings Pagewise..");	
+		Page<Booking> bookings = bookingService.sortByPage(pageNumber);	
+		return new ResponseEntity< Page<Booking> >(bookings, HttpStatus.OK);
 	}
 }

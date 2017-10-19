@@ -147,18 +147,18 @@
 			<version>2.1.1</version>
 		</dependency>
 
-		<!-- javamelody-core It will impact on swagger API
+		<!-- javamelody-core It will impact on swagger API  
 		<dependency>
 			<groupId>net.bull.javamelody</groupId>
 			<artifactId>javamelody-spring-boot-starter</artifactId>
 			<version>1.69.0</version>
-		</dependency>  -->
+		</dependency> -->
         <!--  Java melody auto-proxy issues solution 
+        
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency> -->
-
 	</dependencies>
 
 

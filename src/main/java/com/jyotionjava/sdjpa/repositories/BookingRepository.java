@@ -1,12 +1,13 @@
 package com.jyotionjava.sdjpa.repositories;
 
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jyotionjava.sdjpa.models.Booking;
 
 @Transactional
-public interface BookingRepository extends CrudRepository<Booking, Long> {
+public interface BookingRepository extends PagingAndSortingRepository<Booking, Long> {
 	
 	/**
 	   * This method will find an Boooking instance in the database by its departure.
